@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel=stylesheet type=text/css href="{{ url_for('static', filename='style.css') }}">
+<script type="text/javascript"src="{{url_for('static', filename='script.js')}}"></script>
+<html>
+{% extends "Layout/Layout.html" %}
+  {% block head %}
+    <meta charset="UTF-8">
+    <title>Results</title>
+
+  {% endblock %}      
+  {% block body %}
+<h1>You have submitted the following:</h1></br>
+
+</br>
+<h1>{{Name}}</h1>
+<h1>{{Description}}</h1>
+<h1>{{WithdrawDeposit}}</h1>
+<h1>{{Company}}</h1>
+<h1>{{Date}}</h1>
+<h1>{{Amount}}</h1>
+<h1>{{Comments}}</h1>
+<p><img src="{{ url_for('static', filename = image) }}" width=75% height=75%></p>
+    {% endblock %}  
+</html>

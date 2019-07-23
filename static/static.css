@@ -1,0 +1,626 @@
+
+
+
+@media screen and (min-width: 100px) and (max-width: 1280px) {
+@font-face {   
+    font-family: 'pharmount';    
+    src: url('https://dl.dropboxusercontent.com/u/38807507/pharmount.ttf'); 
+}
+img{
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+.imgAndrew{
+  border-radius: 8px;
+  max-height: 30%;
+  width: auto;
+}
+    
+    /* Style the tab */
+    .tab {
+        overflow: hidden;
+        border: 1px solid #ccc;
+        background-color: #111;
+        color: #818181;
+    }
+    
+    /* Style the buttons inside the tab */
+    .tab button {
+        background-color: inherit;
+        float: center;
+        border: none;
+        outline: none;
+        cursor: pointer;
+        padding: 14px 16px;
+        transition: 0.3s;
+        font-size: 25px;
+        width: 32%;
+        color: #818181;
+    }
+    
+    /* Change background color of buttons on hover */
+    .tab button:hover {
+        background-color: #111;
+        color: #f1f1f1;
+    }
+    
+    /* Create an active/current tablink class */
+    .tab button.active {
+        background-color: #111;
+    }
+    @keyframes fadeEffect {
+    from {opacity: 0;}
+    to {opacity: 1;}
+    }
+    /* Style the tab content */
+    .tabcontent {
+        display: none;
+        padding: 6px 12px;
+        animation: fadeEffect 1s;
+    }
+.FinishItem{
+    font-size: 16.5px;
+}
+.Edit{
+    font-weight: bold; 
+    font-size : 20px; 
+    width:60px;
+    height:25px;
+}
+.fileContainer {
+    overflow: hidden;
+    position: relative;
+}
+
+.fileContainer [type=file] {
+    cursor: pointer;
+    display: block;
+    font-size: 999px;
+    filter: alpha(opacity=0);
+    min-height: 100%;
+    min-width: 100%;
+    opacity: 0;
+    position: absolute;
+    right: 0;
+    text-align: right;
+    top: 0;
+}
+.fileContainer {
+    background: gray;
+    float: left;
+    color: white;
+    width: 100%;
+    margin: 8px 0;
+    border: none;
+    border-radius: 4px;
+    font-size: 45px;
+    font-style: bold;  
+}
+button{
+    width: 100%;
+    background-color: red;
+    color: white;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;  
+    font-size: 45px;
+    font-style: bold;  
+}
+textarea {
+    width: 100%;
+}
+input[type=submit] {
+    width: 100%;
+    background-color: #4CAF50;
+    color: white;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 45px;
+    font-style: bold;
+}
+
+input[type=text], select {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    text-align: center;
+    font-size: 20px;
+    font-style: bold;
+}
+body {
+    font-family: "Lato", sans-serif;
+}
+.searchHead{
+    font-size: 20.25px;
+
+}
+.searchItem{
+    font-size: 14px;
+}
+h1{
+    text-align: center;
+    font-size: 32px;
+}
+h2 {
+    text-align: center;
+    font-size: 29px;
+}
+h3{
+    text-align: center;
+    font-size: 17px;
+}
+h4{
+    text-align: center;
+    font-size: 24px;
+}
+.sidenav {
+    height: 100%;
+    width: 0;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    background-color: #111;
+    overflow-x: hidden;
+    transition: 0.5s;
+    padding-top: 60px;
+}
+
+.sidenav a {
+    padding: 8px 8px 8px 32px;
+    text-decoration: none;
+    font-size: 25px;
+    color: #818181;
+    display: block;
+    transition: 0.3s;
+}
+
+.sidenav a:hover {
+    color: #f1f1f1;
+}
+
+.sidenav .closebtn {
+    position: absolute;
+    top: 0;
+    right: 25px;
+    font-size: 36px;
+    margin-left: 50px;
+}
+
+
+    /* Dropdown Button */
+    .dropbtn {
+        background-color: #4fc609;
+        color: white;
+        padding: 16px;
+        font-size: 16px;
+        border: none;
+        cursor: pointer;
+        margin: auto
+    }
+
+    /* Dropdown button on hover & focus */
+    .dropbtn:hover, .dropbtn:focus {
+        background-color: #48bc03;
+    }
+
+    /* The container <div> - needed to position the dropdown content */
+    .dropdown {
+        position: relative;
+        display: inline-block;
+        height: 20%;
+        width: 30%;
+    }
+
+    /* Dropdown Content (Hidden by Default) */
+    .dropdown-content {
+        display: none;
+        position: absolute;
+        background-color: #79ff3d;
+        min-width: 160px;
+        box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+        z-index: 1;
+    }
+
+    /* Links inside the dropdown */
+    .dropdown-content a {
+        color: black;
+        padding: 12px 16px;
+        text-decoration: none;
+        display: block;
+        font-weight: bold;
+    }
+
+    /* Change color of dropdown links on hover */
+    .dropdown-content a:hover {
+        background-color: #3dd417
+    }
+
+    /* Show the dropdown menu (use JS to add this class to the .dropdown-content container when the user clicks on the dropdown button) */
+    .show {
+        display: block;
+    }
+    body {
+
+         background-image: url("/static/350829-widescreen-website-background-1920x1080-windows-xp.jpg");
+         background-attachment: fixed; 
+         background-size: cover;
+         margin: 0;
+    }
+
+    .content {
+        background-color: rgba(255, 255, 255, .8);
+        border-radius: .25em;
+        box-shadow: 0 0 .25em rgba(0, 0, 0, .25);
+        box-sizing: border-box;
+        left: 50%;
+        padding: 10vmin;
+        position: fixed;
+        text-align: center;
+        top: 50%;
+        transform: translate(-50%, -50%);
+    }
+img.center {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+form{
+    text-align: center;
+    font-weight: bold;
+}
+.mdy{
+    text-align: center;
+    font-weight: italic;
+    font-size: 14px;
+    color: Gainsboro;
+  
+}
+.FinishButton{
+    text-align: center;  
+}
+p{
+    text-align: center;
+    font-weight: bold;
+    font-size: 32px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* 
+  ##Device = Desktops
+  ##Screen = >1281px 
+*/
+}
+@media (min-width: 1281px) {
+@font-face {   
+    font-family: 'pharmount';    
+    src: url('https://dl.dropboxusercontent.com/u/38807507/pharmount.ttf'); 
+}
+img{
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  max-height: 60vh;
+  width: auto;
+  border-radius: 3%;
+}
+.tab{
+background-color: #DCDCDC;
+}
+    
+    /* Style the buttons inside the tab */
+    .tab button {
+        background-color: inherit;
+        float: center;
+        border: none;
+        outline: none;
+        cursor: pointer;
+        padding: 14px 16px;
+        transition: 0.3s;
+        font-size: 25px;
+        width: 33%;
+        color: #000000;
+    }
+    
+    /* Change background color of buttons on hover */
+    .tab button:hover {
+        background-color: #C0C0C0;
+    }
+    
+    /* Create an active/current tablink class */
+    .tab button.active {
+        background-color: #A9A9A9;
+    }
+    @keyframes fadeEffect {
+    from {opacity: 0;}
+    to {opacity: 1;}
+    }
+    /* Style the tab content */
+    .tabcontent {
+        display: none;
+        padding: 6px 12px;
+        animation: fadeEffect 1s;
+    }
+textarea {
+    width: 99%;
+}
+.Index{
+    font-size: 50px;
+}
+.searchHead{
+    font-size: 50 px;
+
+}
+.fileContainer {
+    overflow: hidden;
+    position: relative;
+}
+
+.fileContainer [type=file] {
+    cursor: pointer;
+    display: block;
+    font-size: 999px;
+    filter: alpha(opacity=0);
+    min-height: 99%;
+    min-width: 99%;
+    opacity: 0;
+    position: absolute;
+    right: 0;
+    text-align: right;
+    top: 0;
+}
+.fileContainer {
+    background: gray;
+    display: inline-block;
+    color: white;
+    width: 99%;
+    margin: 8px 0;
+    border: none;
+    border-radius: 4px;
+    font-size: 45px;
+    font-style: bold;  
+}
+.Edit{
+    font-weight: bold; 
+    font-size : 32px; 
+    width:175px;
+    height:50px;
+}
+button{
+    width: 99%;
+    background-color: red;
+    color: white;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;    
+    font-size: 45px;
+    font-style: bold;  
+}
+input[type=submit] {
+    width: 99%;
+    background-color: #4CAF50;
+    color: white;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 45px;
+    font-style: bold;  
+}
+
+input[type=text], select {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    text-align: center;
+    font-size: 30px;
+    font-style: bold;
+}
+body {
+    font-family: "Lato", sans-serif;
+}
+.FinishItem{
+    font-size: 40px;
+}
+
+
+.searchItem{
+    font-size: 40px;
+}
+h1{
+    text-align: center;
+    font-size: 60px;
+}
+h2 {
+    text-align: center;
+    font-size: 50px;
+    font-style: bold;
+}
+h3{
+    text-align: center;
+    font-size: 30px;
+}
+
+h4{
+    text-align: center;
+    font-size: 30px;
+}
+
+.sidenav {
+    height: 100%;
+    width: 0;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    background-color: #111;
+    overflow-x: hidden;
+    transition: 0.35s;
+    padding-top: 60px;
+}
+
+.sidenav a {
+    padding: 8px 8px 8px 32px;
+    text-decoration: none;
+    font-size: 25px;
+    color: #818181;
+    display: block;
+    transition: 0.2s;
+}
+
+.sidenav a:hover {
+    color: #f1f1f1;
+}
+
+.sidenav .closebtn {
+    position: absolute;
+    top: 0;
+    right: 25px;
+    font-size: 36px;
+    margin-left: 50px;
+}
+
+
+    /* Dropdown Button */
+    .dropbtn {
+        background-color: #4fc609;
+        color: white;
+        padding: 16px;
+        font-size: 16px;
+        border: none;
+        cursor: pointer;
+        margin: auto
+    }
+
+    /* Dropdown button on hover & focus */
+    .dropbtn:hover, .dropbtn:focus {
+        background-color: #48bc03;
+    }
+
+    /* The container <div> - needed to position the dropdown content */
+    .dropdown {
+        position: relative;
+        display: inline-block;
+        height: 20%;
+        width: 30%;
+    }
+
+    /* Dropdown Content (Hidden by Default) */
+    .dropdown-content {
+        display: none;
+        position: absolute;
+        background-color: #79ff3d;
+        min-width: 160px;
+        box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+        z-index: 1;
+    }
+
+    /* Links inside the dropdown */
+    .dropdown-content a {
+        color: black;
+        padding: 12px 16px;
+        text-decoration: none;
+        display: block;
+        font-weight: bold;
+    }
+
+    /* Change color of dropdown links on hover */
+    .dropdown-content a:hover {
+        background-color: #3dd417
+    }
+
+    /* Show the dropdown menu (use JS to add this class to the .dropdown-content container when the user clicks on the dropdown button) */
+    .show {
+        display: block;
+    }
+
+    body {
+
+    background-image: url("/static/350829-widescreen-website-background-1920x1080-windows-xp.jpg");
+    background-attachment: fixed; 
+    -webkit-background-size: auto;;
+    margin: 0;
+    }
+
+img.center {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+form{
+    text-align: center;
+    font-weight: bold;
+}
+p{
+    text-align: center;
+    font-weight: bold;
+    font-size: 32px;
+}
+.mdy{
+    text-align: center;
+    font-weight: italic;
+    font-size: 14px;
+    color: Gainsboro;
+  
+}
+}
+/* 
+  ##Device = Mobile
+  ##Screen = <1280px
+*/
+
+
+  
+

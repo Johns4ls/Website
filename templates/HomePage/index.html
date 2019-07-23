@@ -1,0 +1,13 @@
+{% extends "Layout/Layout.html" %}
+
+<html>
+  {% block head %}
+      <title> Dashboard</title>
+  {% endblock %}      
+  {% block body %}
+      <h1 class="Index">Your current balance is: ${{balance}}</h1>
+      <h1 class ="Index">You have {{Transaction}} incomplete transactions</h1>
+
+
+{% endblock %}
+</html>

@@ -1,0 +1,61 @@
+{% extends "Layout/Layout.html" %}
+{% block head %}
+<title>Update Transaction</title>
+  {% endblock %}      
+  {% block body %}
+<form action="/Update/{{TransID}}" method="POST" enctype="multipart/form-data">
+    <h1>Name:</h1> <input type="text" id="name" name="Name" value='{{Name}}'required><br>
+    <h1>Description:</h1> <input type="text" name="Description" value='{{Description}}'><br>
+    <h1>Withdraw/Deposit:</h1> <input type="text" name="WithdrawDeposit" value={{WithdrawDeposit}} required><br>
+<h1>Company:</h1> <input type="text" name="Company" value='{{Company}}'><br>
+    <div class="mdy">(mm-dd-yyyy)</div>
+<h1>Date:</h1> <input type="text" name="Date" value='{{Date}}'><br>
+<h1>Amount:</h1> <input type="text" name="Amount" value={{Amount}} required><br>
+<h1>Comments:<br><h1>
+    <textarea name="Comments" rows="3"></textarea><br>
+<h1>Image:</h1> <input type="text" name="Image" value="{{Receipt}}"><br>
+    <p><img id="image" src="{{ url_for('static', filename = Receipt) }}" width=55% height=55%></p>
+    <label class="fileContainer">
+            Input File
+    <input type="file" accept="image/*" id="file" name="file" /><br>
+    </label>
+    <input type="submit" value="Update" onclick="window.location='/Update/{{TransID}}'">
+</form>
+<p>
+    <button onclick="Function()">Delete</button>
+</p>
+
+
+
+<script>
+
+function Function() {
+
+    if (confirm("Are you sure you want to delete this record?")) {
+
+        window.location='/Delete/{{TransID}}'
+
+    } else {
+
+    }
+
+}
+</script>
+<script>
+    var src = document.getElementById("file").onchange = function (e) {
+    var image = e.target.files[0];
+    window.loadImage(image, function (img) {
+        if (img.type === "error") {
+        } else {
+            window.EXIF.getData(image, function () {
+                var orientation = window.EXIF.getTag(this, "Orientation");
+                var canvas = window.loadImage.scale(img, {orientation: orientation || 0, canvas: true});
+                $("#image").attr("src",canvas.toDataURL());
+            });
+        }
+    });
+  };
+</script>
+{% endblock %}
+
+</html>

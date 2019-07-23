@@ -1,0 +1,13 @@
+{% extends "Layout/Layout.html" %}
+  {% block head %}
+<title>Report Generator</title>
+<h1> Andrew's Report Generation System</h1>
+  {% endblock %}      
+  {% block body %}
+<form action="/ReportGeneration" method="POST" enctype="multipart/form-data">
+    <h1>Initial Date:</h1> <input type="text" name="InitialDate" class="auto-kal" autocomplete="off" required><br>
+    <H1>Final Date:</h1> <input type="text" name="FinalDate" class="auto-kal" autocomplete="off" required><br>
+    <input type="submit" value="Generate">
+</form>
+
+{% endblock %}

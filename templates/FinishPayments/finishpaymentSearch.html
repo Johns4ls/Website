@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+ <link rel=stylesheet type=text/css href="{{ url_for('static', filename='style.css') }}">
+<script type="text/javascript"src="{{url_for('static', filename='script.js')}}"></script>
+{% extends "Layout/Layout.html" %}
+  {% block head %}
+<title>Incomplete Transactions</title>
+ <h1><b>Query Results</b></h1>
+  {% endblock %}      
+  {% block body %}
+ <table style="width:100%">
+   <h1>
+   <tr>
+    <td><h2>Company</h2></td>
+     <td><h2>Date</h2></td>
+     <td><h2>Amount</h2></td>
+  </tr>
+     </h1>
+{% for item in items %}
+
+   <tr>
+     <td> <h4 class="FinishItem">{{item.Company}}  </h4> </td>
+     <td><h4 class="FinishItem"> {{item.Date}}  </h4> </td>
+     <td><h4 class="FinishItem"> {{item.Amount}} </h4></td>
+     <td><input type="button" class = "Edit" id={{item.tempID}} value="Edit" onclick="window.location='/finish/{{item.tempID}}';"></div></td>
+   </tr>
+{% endfor %}
+</table>
+{% endblock %}      
+</html>

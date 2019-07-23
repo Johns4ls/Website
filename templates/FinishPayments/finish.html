@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+ <link rel=stylesheet type=text/css href="{{ url_for('static', filename='style.css') }}">
+<script type="text/javascript"src="{{url_for('static', filename='script.js')}}"></script>
+{% extends "Layout/Layout.html" %}
+  {% block body %}
+<title>Finish Incomplete Transactions</title>
+<form action="/finishTemp/{{tempID}}" method="POST" enctype="multipart/form-data">
+    <h1>Name:</h1> <input type="text" name="Name" required><br>
+    <h1>Description:</h1> <input type="text" name="Description"><br>
+    <h1>Withdraw/Deposit:</h1> <input type="text" name="WithdrawDeposit" value={{WithdrawDeposit}} required><br>
+    <h1>Company:</h1> <input type="text" name="Company" value='{{Company}}'><br>
+    <div class="mdy">(mm-dd-yyyy)</div>
+    <h1>Date:</h1> <input type="text" name="Date" value='{{Date}}'><br>
+    <h1>Amount:</h1> <input type="text" name="Amount" value={{Amount}} required><br>
+    <h1>Comments:</h1><br>
+    <textarea name="Comments" rows="3" ></textarea><br>
+    <label class="fileContainer">
+        Input File
+    <input type="file" accept="image/*" id="file" name="file" onchange="document.getElementById('image').src = window.URL.createObjectURL(this.files[0])" /><br>
+    </label>
+    <br>
+    <img id="image" width=55% height=55% />
+    <input type="submit" value="Create"onclick="window.location='/finishTemp/{{tempID}}'">
+
+</form>
+<div class="FinishButton"><button onclick="Function()">Delete</button></div>
+
+
+
+
+
+
+
+<script>
+
+    var src = document.getElementById("file").onchange = function (e) {
+
+    var image = e.target.files[0];
+
+    window.loadImage(image, function (img) {
+
+        if (img.type === "error") {
+
+            console.log("couldn't load image:", img);
+
+        } else {
+
+            window.EXIF.getData(image, function () {
+
+                console.log("done!");
+
+                var orientation = window.EXIF.getTag(this, "Orientation");
+
+                var canvas = window.loadImage.scale(img, {orientation: orientation || 0, canvas: true});
+
+                $("#image").attr("src",canvas.toDataURL());
+
+            });
+
+        }
+
+    });
+
+  };
+
+</script>
+
+
+
+
+
+
+<script>
+
+function Function() {
+
+    if (confirm("Are you sure you want to delete this record?")) {
+        window.location='/DeleteTemp/{{tempID}}'
+
+    } 
+else {
+
+
+
+    }
+
+}
+
+</script>
+
+{% endblock %}
+</html>

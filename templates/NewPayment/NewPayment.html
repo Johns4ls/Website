@@ -1,0 +1,45 @@
+{% extends "Layout/Layout.html" %}
+  {% block head %}
+<title>Create a new Transaction</title>
+<h1> Create A New Transaction</h1>
+  {% endblock %}      
+  {% block body %}
+<form action="/result" method="POST" enctype="multipart/form-data">
+    <h2>Name:</h2> <br> <input type="text" name="Name" required><br>
+    <h2>Description:</h2> <br> <input type="text" name="Description"><br>
+    <h2>Withdraw/Deposit:</h2> <br> <input type="text" name="WithdrawDeposit" required><br>
+    <h2>Company:</h2> <br> <input type="text" name="Company"><br>
+    <div class="mdy">(mm-dd-yyyy)</div>
+    <h2>Date:</h2> <br> <input type="text" name="Date"><br>
+    <h2>Amount:</h2><br> <input type="text" name="Amount" required><br>
+    <h2>Comments:</h2><br>
+    <textarea name="Comments" rows="3"></textarea><br>
+    <label class="fileContainer">
+            Input File
+    <input type="file" accept="image/*" id="file" name="file" /><br>
+    </label>
+    <img id="image" width=55% height=55%>
+    <br>
+    <input type="submit" value="Create">
+
+</form>
+
+<script>
+    var src = document.getElementById("file").onchange = function (e) {
+    var image = e.target.files[0];
+    window.loadImage(image, function (img) {
+        if (img.type === "error") {
+            console.log("couldn't load image:", img);
+        } else {
+            window.EXIF.getData(image, function () {
+                console.log("done!");
+                var orientation = window.EXIF.getTag(this, "Orientation");
+                var canvas = window.loadImage.scale(img, {orientation: orientation || 0, canvas: true});
+                $("#image").attr("src",canvas.toDataURL());
+            });
+        }
+    });
+  };
+</script>
+
+{% endblock %}

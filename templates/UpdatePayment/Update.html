@@ -1,0 +1,19 @@
+{% extends "Layout/Layout.html" %}
+
+{% block head %}
+    <meta charset="UTF-8">
+    <title>Results</title>
+
+  {% endblock %} 
+  {% block body %}
+<h1>You have Updated the record to the following:</h1></body></html></br>
+</br>
+<h1>{{Name}}</h1>
+<h1>{{Description}}</h1>
+<h1>{{WithdrawDeposit}}</h1>
+<h1>{{Company}}</h1>
+<h1>{{Date}}</h1>
+<h1>{{Amount}}</h1>
+<h1>{{Comments}}</h1>
+<p><img src="{{ url_for('static', filename = image) }}" width=75% height=75%></p>
+  {% endblock %} 

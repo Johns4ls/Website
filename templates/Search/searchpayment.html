@@ -1,0 +1,21 @@
+
+{% extends "Layout/Layout.html" %}
+  {% block head %}
+<title>Search Transactions</title>
+<h1> Search Transaction History</h1>
+  {% endblock %} 
+  {% block body %}
+<form action="/Paging" method="POST" enctype="multipart/form-data">
+
+
+    <h2>Name:</h2> <input type="text" name="Name"><br>
+    <h2>Description:</h2> <input type="text" name="Description"><br>
+    <h2>WithdrawDeposit:</h2> <input type="text" name="WithdrawDeposit"><br>
+    <h2>Company:</h2> <input type="text" name="Company"><br>
+    <h2>Date:</h2> <input type="text" name="Date"><br>
+    <h2>Amount:</h2> <input type="text" name="Amount"><br>
+
+    <input type="submit" value="Search">
+   
+</form>
+  {% endblock %}   

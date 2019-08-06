@@ -1,7 +1,6 @@
 #Various imports
-from flask import Flask, flash, render_template, send_from_directory
+from flask import Flask, flash, render_template, send_from_directory, request, redirect, url_for, send_file, session
 import pymysql
-from flask import Flask, request, redirect, url_for, send_file, session
 from werkzeug.utils import secure_filename
 import os
 import PIL
@@ -10,12 +9,9 @@ from datetime import date, datetime, timedelta
 import sys
 import time
 from Modules import Tlbx
-from threading import Lock
 import math
 import sys
 import time
-import socket
-import subprocess
 import select
 from flask import Flask
 from os import listdir

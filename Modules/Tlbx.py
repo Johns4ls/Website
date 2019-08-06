@@ -3,8 +3,6 @@ from jinja2 import Template
 import os
 import time
 from PIL import Image
-import base64
-from weasyprint import HTML
 from multiprocessing import Process
 import time
 from datetime import timedelta

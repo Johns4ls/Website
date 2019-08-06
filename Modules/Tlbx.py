@@ -2,9 +2,6 @@ import pymysql
 from jinja2 import Template
 import os
 import time
-from PIL import Image
-from multiprocessing import Process
-import time
 from datetime import timedelta
 import datetime
 from datetime import date
@@ -36,58 +33,7 @@ def dbConnectDict():
   cur = db.cursor(pymysql.cursors.DictCursor)
   return cur
 
-def FileRemove(Remove_Path, Remove_Name):
-  remove = Remove_Path + Remove_Name + '.pdf'
-  if os.path.exists(remove):
-    os.remove(remove)
-    print('Old PDF Removed')
 
-def HercToPNG():
-  Herc = '/var/www/Flask/static/Hercules.png'
-  Herc = open(Herc, 'rb').read()
-  Herc = base64.b64encode(Herc)
-  Herc = Herc.decode('ascii')
-  print('Herc')
-  return Herc
-
-def RenderHTML(html_Path, t, DATE, items,Name, Introduction, HercPath):
-  with open(html_Path + Name + '.html', 'w') as f:
-          f.write(t.render(items = items, DATE=DATE, Introduction = Introduction, HercPath = HercPath))
-          f.close()
-
-def PDFGEN(css_Path, html_Path, pdf_Path,Name ):
-  if not os.path.exists(pdf_Path):
-    os.makedirs(pdf_Path)
-  HTML(html_Path + Name + '.html').write_pdf(pdf_Path + "/" + Name + ".pdf", stylesheets=[css_Path])
-  print("Removing HTML")
-  os.remove(html_Path + Name + '.html')
-
-def imgToPNG(items):
-  images = []
-  for item in items:
-    path = '/var/www/Flask/static/'
-    PNGPath = "/var/www/Flask/ReportGenerator/PNG/"
-    name = item['Receipt']
-    imageName = name.split('.')
-    imageName = imageName[0]
-    png = PNGPath + imageName + ".png"
-    if name != '' and not os.path.exists(png):
-      image = path + name
-      image = Image.open(image)
-      images.append(imageName)
-      new_height = 600
-      new_width = 400
-      image = image.resize((new_width, new_height), Image.ANTIALIAS)
-      image.save(png,optimize=True,quality=100)
-    try:
-      image = open(png, 'rb').read()
-      image = base64.b64encode(image)
-      image = image.decode('ascii')
-      item['Receipt'] = image
-
-    except:
-      image = ''
-  return items
 
 def convertMonth(MONTH):
 

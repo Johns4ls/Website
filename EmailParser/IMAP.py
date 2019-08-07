@@ -10,16 +10,18 @@ from threading import Thread
 from HTMLParser import HTMLParser
 import smtplib
 import sys
+import os
 #Tlbx module found in Flask/Modules
 from Modules import Tlbx
-sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+
 #Declarations of variables
+sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 Amount = ''
 to_ = ''
 subject = ''
 date = ''
 
-#Function to commit data collected from scraping an e-mail to the tTransaction table
+#Function to commit data collected from scraping the e-mail to the tTransaction table
 def dbTrans(Name, Description, WithdrawDeposit, Company, Date, Amount, Comments, Receipt):
     print("dbTrans works!")
     cur = Tlbx.dbConnect()
@@ -32,7 +34,7 @@ def dbTrans(Name, Description, WithdrawDeposit, Company, Date, Amount, Comments,
         body = "IMAP failed. Name was %s, Description was %s, Subject was %s, Company was %s, Date was %s Amount was %s Comments was %s Receipt was %s", (Name, Description, WithdrawDeposit, Company, Date, Amount, Comments, Receipt)
         Tlbx.SendEmail(body)    
 
-#Function to commit data collected from scraping an e-mail to the tTemporary table
+#commit data collected from scraping the e-mail to the tTemporary table
 def dbTemp(WithdrawDeposit, Company, Date, Amount):
     print("dbTemp works!")
     query = ("INSERT INTO tTemporary (WithdrawDeposit, Company, Date, Amount) VALUES (%s, %s, %s, %s)")
@@ -46,7 +48,8 @@ def dbTemp(WithdrawDeposit, Company, Date, Amount):
         Tlbx.SendEmail(body)
 
 
-#html parsing class which takes the body data in html and parses the information and appends it to a variable, called later
+'''html parsing class which takes the body data in html and parses the information 
+   which then appends it to the variable body which is parsed out after'''
 class MyHTMLParser(HTMLParser):
 
     def handle_starttag(self, tag, attributes):
@@ -58,11 +61,6 @@ class MyHTMLParser(HTMLParser):
             self.inLink = True
             self.lasttag = tag
 
-            def handle_endtag(self, tag):
-                if tag == 'h4':
-                    self.inlink = False
-                elif tag == 'h2':
-                    self.inlink = False
 
     def handle_data(self, data,):
         if self.lasttag == 'h2' and self.inLink and data.strip():
@@ -92,10 +90,6 @@ class MyCheckParser(HTMLParser):
         if tag =='h4':
             self.inLink = True
             self.lasttag = tag
-
-            def handle_endtag(self, tag):
-                if tag == 'h4':
-                    self.inlink = False
 
     def handle_data(self, data,):
         if self.lasttag == 'h4' and self.inLink and data.strip():
@@ -128,7 +122,7 @@ def IMAP():
 
     
     #this will search the email and give me all unread emails.
-    status, response = mail.search(None, '(UNSEEN)')
+    response = mail.search(None, '(UNSEEN)')
     response = response[0].split()
     
     #For each email we will parse out the data and commit to the database
@@ -244,7 +238,7 @@ def IMAP():
                     Amount = Amount.strip('\t')
                     Amount = Amount.strip('\n')
                     Amount = Amount.strip()
-                    Amount = re.findall("\d+\.\d+", Amount)
+                    Amount = re.findall(r"\d+\.\d+", Amount)
                 #Send e-mail if parsing fails
                 except:
                     print("Company and Amount parsing Failed!")
@@ -339,8 +333,6 @@ def IMAP():
             end = 'USD'
             Start1 = 'Name:'
             end1 = 'Merchant'
-            start2 = 'Location:'
-            end2 = ','
             s = array[1]
             WithdrawDeposit = ((s.split(startType))[1].split(endType)[0])
             if("purchase" in WithdrawDeposit):

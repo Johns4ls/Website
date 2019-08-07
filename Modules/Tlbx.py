@@ -7,6 +7,7 @@ import datetime
 from datetime import date
 import smtplib
 
+#Send a text message via email to me when an error in the system occurs
 def SendEmail(body):
     try:  
         gmail_user = 'johnsonandrew123198@gmail.com'  
@@ -23,47 +24,19 @@ def SendEmail(body):
     except:
         print("Could Not Connect")
 
-
+#Connect to the database
 def dbConnect():
   db = pymysql.connect(host='127.0.0.1', port=3306, user='WebServer', password='Momrocks38', db='mydb',autocommit=True)
   cur = db.cursor()
   return cur
+
+#Connect to the database and return values as a python dictionary
 def dbConnectDict():
   db = pymysql.connect(host='127.0.0.1', port=3306, user='WebServer', password='Momrocks38', db='mydb',autocommit=True)
   cur = db.cursor(pymysql.cursors.DictCursor)
   return cur
 
-
-
-def convertMonth(MONTH):
-
-  if MONTH == '01':
-    MONTH = 'January'
-  if MONTH == '02':
-    MONTH = 'February'
-  if MONTH == '03':
-    MONTH = 'March'
-  if MONTH == '04':
-    MONTH = 'April'
-  if MONTH == '05':
-    MONTH = 'May'
-  if MONTH == '06':
-    MONTH = 'June'
-  if MONTH == '07':
-    MONTH = 'July'
-  if MONTH == '08':
-    MONTH = 'August'
-  if MONTH == '09':
-    MONTH = 'September'
-  if MONTH == '10':
-    MONTH = 'October'
-  if MONTH == '11':
-    MONTH = 'November'
-  if MONTH == '12':
-    MONTH = 'December'
-  return MONTH
-
-
+#Return the sum of the total amount within both tables.
 def Balance():
     cur = dbConnect()
     query = ("Select SUM(Amount) FROM tTemporary")
@@ -80,6 +53,7 @@ def Balance():
         balance = ('%.2f' % balance)
     return balance
 
+#Convert the date received to be propertly yyyy/mm/dd
 def dateConvert(Day, Month, Year):
     try:
         if (Day == "1"):
@@ -127,9 +101,6 @@ def dateConvert(Day, Month, Year):
             Month = "11"
         if (Month == 'Dec'):
             Month = "12"
-
-        # get third as year
-
 
         # put the parsed data in Date
         Date = Year + "/" + Month + "/" + Day

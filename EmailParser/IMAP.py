@@ -10,16 +10,18 @@ from threading import Thread
 from HTMLParser import HTMLParser
 import smtplib
 import sys
+import os
 #Tlbx module found in Flask/Modules
 from Modules import Tlbx
-sys.path.append("/var/www/Flask/")
+
 #Declarations of variables
+sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 Amount = ''
 to_ = ''
 subject = ''
 date = ''
 
-#Function to commit data collected from scraping an e-mail to the tTransaction table
+#Function to commit data collected from scraping the e-mail to the tTransaction table
 def dbTrans(Name, Description, WithdrawDeposit, Company, Date, Amount, Comments, Receipt):
     print("dbTrans works!")
     cur = Tlbx.dbConnect()
@@ -32,7 +34,7 @@ def dbTrans(Name, Description, WithdrawDeposit, Company, Date, Amount, Comments,
         body = "IMAP failed. Name was %s, Description was %s, Subject was %s, Company was %s, Date was %s Amount was %s Comments was %s Receipt was %s", (Name, Description, WithdrawDeposit, Company, Date, Amount, Comments, Receipt)
         Tlbx.SendEmail(body)    
 
-#Function to commit data collected from scraping an e-mail to the tTemporary table
+#commit data collected from scraping the e-mail to the tTemporary table
 def dbTemp(WithdrawDeposit, Company, Date, Amount):
     print("dbTemp works!")
     query = ("INSERT INTO tTemporary (WithdrawDeposit, Company, Date, Amount) VALUES (%s, %s, %s, %s)")
@@ -46,7 +48,8 @@ def dbTemp(WithdrawDeposit, Company, Date, Amount):
         Tlbx.SendEmail(body)
 
 
-#html parsing class which takes the body data in html and parses the information and appends it to a variable, called later
+'''html parsing class which takes the body data in html and parses the information 
+   which then appends it to the variable body which is parsed out after'''
 class MyHTMLParser(HTMLParser):
 
     def handle_starttag(self, tag, attributes):
@@ -58,11 +61,6 @@ class MyHTMLParser(HTMLParser):
             self.inLink = True
             self.lasttag = tag
 
-            def handle_endtag(self, tag):
-                if tag == 'h4':
-                    self.inlink = False
-                elif tag == 'h2':
-                    self.inlink = False
 
     def handle_data(self, data,):
         if self.lasttag == 'h2' and self.inLink and data.strip():
@@ -92,10 +90,6 @@ class MyCheckParser(HTMLParser):
         if tag =='h4':
             self.inLink = True
             self.lasttag = tag
-
-            def handle_endtag(self, tag):
-                if tag == 'h4':
-                    self.inlink = False
 
     def handle_data(self, data,):
         if self.lasttag == 'h4' and self.inLink and data.strip():
@@ -128,7 +122,7 @@ def IMAP():
 
     
     #this will search the email and give me all unread emails.
-    status, response = mail.search(None, '(UNSEEN)')
+    response = mail.search(None, '(UNSEEN)')
     response = response[0].split()
     
     #For each email we will parse out the data and commit to the database
@@ -166,11 +160,13 @@ def IMAP():
 
         #If this data from pncalerts, we run it through this parsing group
         if (from_ == "PNC Alerts <pncalerts@pnc.com>"):
+            #An alert for using the debit card 
             if( "ATM" in subject_):
                 print("There should be no ATM usage!")
                 body = "Someone pulled money out of the ATM using Andrew's card."
                 Tlbx.SendEmail(body)
                 continue
+            #Compares account balance to the current database sum
             elif( "Your Checking Account Balance" in subject_):
                 parser = MyCheckParser()
                 parser.feed(str(email_message))
@@ -202,7 +198,7 @@ def IMAP():
                     print("Balances do not match!")
                     body = "PNC and app balances do not match. PNC balance is " + PNCBalance + " and app balance is " + balance + "."
                     Tlbx.SendEmail(body)
-
+            #If a check is used
             elif( "Check(s)" in subject_):
                 parser = MyCheckParser()
                 parser.feed(str(email_message))
@@ -210,7 +206,6 @@ def IMAP():
                     WithdrawDeposit = "Withdraw"
                 else:
                     WithdrawDeposit = "Deposit"
-                #The global variable body we now get who the money is from and strip excess
                 Company = 'Check'
                 Amount = body[2]
                 Amount = Amount.strip()
@@ -218,10 +213,10 @@ def IMAP():
                 Amount = Amount[1]
                 Amount = Amount.replace("$", "")
                 Amount = Amount.strip()
-                #database connector
                 Day = date[1]
                 Month = date[2]
                 Year = date[3]
+                #Fix date to Y/M/D
                 Date = Tlbx.dateConvert(Day, Month, Year)
                 #Function to connect to database and commit data to tTemporary
                 dbTemp(WithdrawDeposit, Company, Date, Amount)       
@@ -231,7 +226,7 @@ def IMAP():
                 parser.feed(str(email_message))
                 Company = ''
                 Amount = ''
-                #The global variable body we now get who the money is from and strip excess
+                #The global variable body we parse down for the company and amount 
                 try:
                     Company = body[1]
                     Company = Company.strip('\t')
@@ -243,7 +238,8 @@ def IMAP():
                     Amount = Amount.strip('\t')
                     Amount = Amount.strip('\n')
                     Amount = Amount.strip()
-                    Amount = re.findall("\d+\.\d+", Amount)
+                    Amount = re.findall(r"\d+\.\d+", Amount)
+                #Send e-mail if parsing fails
                 except:
                     print("Company and Amount parsing Failed!")
                     body = "IMAP Company/Amount parsing failed. %s was the Company pulled in, and %s was the the Amount pulled in" % (Company, Amount)
@@ -265,8 +261,10 @@ def IMAP():
                     Month=date[2]
                     Year=date[3]
                     Date = Tlbx.dateConvert(Day, Month, Year)
+                #Fix to not parse e-mail with no data
                 elif ('Available Balance' in subject_):
                     continue
+                #Fix to not parse e-mail with no data
                 elif ('Online Banking alerts' in subject_):
                     continue
                 else:
@@ -274,7 +272,9 @@ def IMAP():
                     Day = date[1]
                     Month=date[2]
                     Year = date[3]
+                    #Converts the date to Y/M/D
                     Date = Tlbx.dateConvert(Day, Month, Year)
+
                 # switch the Amount to negative if it is a withdraw
                 if ('Withdraw' in subject_):
                     Amount = -Amount
@@ -286,7 +286,7 @@ def IMAP():
                 Company = Company.replace('To:', '')
                 Company = Company.strip()
                 
-                #Logic to automatically fill out bills and commit directly to tTransaction
+                #If we fit this logic, we will correct the naming and automatically commit to tTransaction
                 if ("DUKE ENERGY OH" in Company or "RUMPKE RESIDENTI" in Company or "CLERMONT COUNTY" in Company or "SSI  TREAS 30    9" in Company or "US BANK HOME MTG" in Company):
                     Name = ''
                     Description = ''
@@ -314,7 +314,7 @@ def IMAP():
                         Name = "Housing"
                     #Function to connect to our database and insert into tTransaction
                     dbTrans(Name, Description, subject_, Company, Date, Amount, Comments, Receipt)
-                #commit data to our incomplete tTemporary table
+                #commit data to our tTemporary table
                 else:
                     #Function to connect to our database and insert into tTemporary
                     dbTemp(subject_, Company, Date, Amount)
@@ -325,7 +325,7 @@ def IMAP():
             #Pull email and decode because it is in base64
             ascil = email_message.get_payload(decode=base64).decode("utf-8")
             
-            #Here we split the array and place them into variables. From there we strip them down.
+            #Here we split the array and place them into variables. From there we will strip them down.
             array = (ascil.split("\n", 1))
             startType = 'Your'
             endType = 'specified'
@@ -333,8 +333,6 @@ def IMAP():
             end = 'USD'
             Start1 = 'Name:'
             end1 = 'Merchant'
-            start2 = 'Location:'
-            end2 = ','
             s = array[1]
             WithdrawDeposit = ((s.split(startType))[1].split(endType)[0])
             if("purchase" in WithdrawDeposit):
@@ -346,6 +344,8 @@ def IMAP():
                 
             #Setup our amount to commit to the database
             Amount = ''
+
+            #Attempt to strip down the Amount and convert to a float. 
             try:
                 Amount = ((s.split(start))[1].split(end)[0])
                 Amount = Amount.strip('\t')
@@ -354,18 +354,22 @@ def IMAP():
                 Amount = Amount.replace('\'', '')
                 Amount = Amount.replace("'", '')
                 Amount=float(Amount)
+
+                #Set amount to negative if this transaction is a withdraw
                 if (WithdrawDeposit == "Withdraw"):
                     Amount = Amount * -1
+
+            #A catch in case the amount does not exist in the e-mail
             except:
                 print("No Amount I Guess")
                 
-            #Parse down the company
+            #remove excess data in company to commit into the database
             Company = ((s.split(Start1))[1].split(end1)[0])
             Company = Company.strip('\t')
             Company = Company.strip('\n')
             Company = Company.strip()
             
-            #if we are one of these, commit directly to tTransaction
+            #if the scraped data fits in this logic, commit directly to tTransaction
             if("ORDER" in Company or "BALANC" in Company or "TIP" in Company or "Northshore Care Supply" in Company ):
                 Name = ''
                 Description = ''
@@ -388,12 +392,12 @@ def IMAP():
                     Name = "Diapers"
                     Description = "Tranquility All Night Through Adult Disposable Briefs"
                     
-                #Function call to create database connection and insert data to tTransaction
+                #Function call to instantiate database connection and insert scraped data into the tTransaction table.
                 dbTrans(Name, Description, WithdrawDeposit, Company, Date, Amount, Comments, Receipt)
 
             #commit to tTemporary table
             else:
-                #Parse company names to make it easier to finish
+                #Parse company names to reduce later work when completing the transaction
                 if("CW BOTANICALS" in Company or "MEIJER" in Company or "FIVE BELOW" in Company or "LOWE'S" in Company or "KROGER" in Company or "MCDONALD'S" in Company or "WALGREENS" in Company or "AMZN MKTP US AMZN.COM/" in Company or "AMAZON" in Company or "AMZN Mktp" in Company or "Amazon" in Company or "amazon" in Company or "THORNTONS" in Company or "KFC" in Company or "TARGET" in Company):
                     if("CW BOTANICALS" in Company):
                         Company = "CW Botanicals"
@@ -415,9 +419,12 @@ def IMAP():
                         Company = "KFC"
                     if("TARGET" in Company):
                         Company = "Target"
-                #Function call to create database connection and insert data to tTemporary
+
+                #Function call to instantiate database connection and insert scraped data into the tTemporary table
                 dbTemp(WithdrawDeposit, Company, Date, Amount)
-#Here is our main class that starts our function.
+
+
+#Our main class that starts the program
 class EmailParser():
 
     t1 = threading.Thread(name='IMAP', target=IMAP())

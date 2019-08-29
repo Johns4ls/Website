@@ -2,16 +2,12 @@ import pymysql
 from jinja2 import Template
 import os
 import time
-from PIL import Image
-import base64
-from weasyprint import HTML
-from multiprocessing import Process
-import time
 from datetime import timedelta
 import datetime
 from datetime import date
 import smtplib
 
+#Send a text message via email to me when an error in the system occurs
 def SendEmail(body):
     try:  
         gmail_user = 'johnsonandrew123198@gmail.com'  
@@ -28,98 +24,19 @@ def SendEmail(body):
     except:
         print("Could Not Connect")
 
-
+#Connect to the database
 def dbConnect():
   db = pymysql.connect(host='127.0.0.1', port=3306, user='WebServer', password='Momrocks38', db='mydb',autocommit=True)
   cur = db.cursor()
   return cur
+
+#Connect to the database and return values as a python dictionary
 def dbConnectDict():
   db = pymysql.connect(host='127.0.0.1', port=3306, user='WebServer', password='Momrocks38', db='mydb',autocommit=True)
   cur = db.cursor(pymysql.cursors.DictCursor)
   return cur
 
-def FileRemove(Remove_Path, Remove_Name):
-  remove = Remove_Path + Remove_Name + '.pdf'
-  if os.path.exists(remove):
-    os.remove(remove)
-    print('Old PDF Removed')
-
-def HercToPNG():
-  Herc = '/var/www/Flask/static/Hercules.png'
-  Herc = open(Herc, 'rb').read()
-  Herc = base64.b64encode(Herc)
-  Herc = Herc.decode('ascii')
-  print('Herc')
-  return Herc
-
-def RenderHTML(html_Path, t, DATE, items,Name, Introduction, HercPath):
-  with open(html_Path + Name + '.html', 'w') as f:
-          f.write(t.render(items = items, DATE=DATE, Introduction = Introduction, HercPath = HercPath))
-          f.close()
-
-def PDFGEN(css_Path, html_Path, pdf_Path,Name ):
-  if not os.path.exists(pdf_Path):
-    os.makedirs(pdf_Path)
-  HTML(html_Path + Name + '.html').write_pdf(pdf_Path + "/" + Name + ".pdf", stylesheets=[css_Path])
-  print("Removing HTML")
-  os.remove(html_Path + Name + '.html')
-
-def imgToPNG(items):
-  images = []
-  for item in items:
-    path = '/var/www/Flask/static/'
-    PNGPath = "/var/www/Flask/ReportGenerator/PNG/"
-    name = item['Receipt']
-    imageName = name.split('.')
-    imageName = imageName[0]
-    png = PNGPath + imageName + ".png"
-    if name != '' and not os.path.exists(png):
-      image = path + name
-      image = Image.open(image)
-      images.append(imageName)
-      new_height = 600
-      new_width = 400
-      image = image.resize((new_width, new_height), Image.ANTIALIAS)
-      image.save(png,optimize=True,quality=100)
-    try:
-      image = open(png, 'rb').read()
-      image = base64.b64encode(image)
-      image = image.decode('ascii')
-      item['Receipt'] = image
-
-    except:
-      image = ''
-  return items
-
-def convertMonth(MONTH):
-
-  if MONTH == '01':
-    MONTH = 'January'
-  if MONTH == '02':
-    MONTH = 'February'
-  if MONTH == '03':
-    MONTH = 'March'
-  if MONTH == '04':
-    MONTH = 'April'
-  if MONTH == '05':
-    MONTH = 'May'
-  if MONTH == '06':
-    MONTH = 'June'
-  if MONTH == '07':
-    MONTH = 'July'
-  if MONTH == '08':
-    MONTH = 'August'
-  if MONTH == '09':
-    MONTH = 'September'
-  if MONTH == '10':
-    MONTH = 'October'
-  if MONTH == '11':
-    MONTH = 'November'
-  if MONTH == '12':
-    MONTH = 'December'
-  return MONTH
-
-
+#Return the sum of the total amount within both tables.
 def Balance():
     cur = dbConnect()
     query = ("Select SUM(Amount) FROM tTemporary")
@@ -136,6 +53,7 @@ def Balance():
         balance = ('%.2f' % balance)
     return balance
 
+#Convert the date received to be propertly yyyy/mm/dd
 def dateConvert(Day, Month, Year):
     try:
         if (Day == "1"):
@@ -183,9 +101,6 @@ def dateConvert(Day, Month, Year):
             Month = "11"
         if (Month == 'Dec'):
             Month = "12"
-
-        # get third as year
-
 
         # put the parsed data in Date
         Date = Year + "/" + Month + "/" + Day
